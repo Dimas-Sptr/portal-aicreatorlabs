@@ -916,7 +916,7 @@
   .tag-cloud {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.65rem;
+    gap: 0.45rem;
     margin-block-end: 2.25rem;
   }
 
@@ -924,16 +924,16 @@
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
-    background: var(--bg-surface);
+    background: oklch(100% 0 0 / 0.03);
     border: 1px solid var(--border-subtle);
     color: var(--text-secondary);
-    padding-block: 0.6rem;
-    padding-inline: 1.05rem;
+    padding-block: 0.45rem;
+    padding-inline: 0.9rem;
     border-radius: var(--radius-pill);
-    font-size: 0.9rem;
+    font-size: 0.82rem;
     font-weight: 500;
     cursor: pointer;
-    min-block-size: 44px;
+    min-block-size: 40px;
     transition: all 0.2s ease;
 
     &:hover {
@@ -943,10 +943,9 @@
     }
 
     &.is-active {
-      color: oklch(14% 0.025 268);
-      background: var(--accent-periwinkle);
-      border-color: var(--accent-periwinkle);
-      font-weight: 600;
+      background: oklch(76% 0.13 274 / 0.16);
+      border-color: var(--border-accent);
+      color: var(--text-primary);
     }
 
     & .tag-num {
