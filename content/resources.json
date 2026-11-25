@@ -1,0 +1,56 @@
+[
+  {
+    "id": "res-1",
+    "title": "System Prompt Architect Blueprint",
+    "category": "Prompt Engineering",
+    "level": "Pemula",
+    "description": "Kerangka menyusun instruksi sistem berstruktur (peran, batasan, format output, dan aturan verifikasi) agar respons LLM konsisten.",
+    "summary": "Templat ini memisahkan konteks tugas, batasan larangan, dan contoh keluaran sehingga model tidak melebar dari tujuan utama.",
+    "template": "PERAN: Bertindak sebagai [Spesialis Domain].\nTUJUAN: Hasilkan [Output Spesifik] berdasarkan data berikut.\nBATASAN:\n- Gunakan bahasa lugas tanpa basa-basi.\n- Tandai bagian yang belum terverifikasi.\nFORMAT: Sajikan dalam poin terstruktur."
+  },
+  {
+    "id": "res-2",
+    "title": "Riset Kompetitor & Validasi Ide 15 Menit",
+    "category": "Workflow Otomasi",
+    "level": "Menengah",
+    "description": "Rangkaian prompt berantai untuk memetakan celah pasar, keluhan pengguna nyata, dan posisi produk sebelum menulis kode.",
+    "summary": "Membantu kreator dan builder memvalidasi kebutuhan pasar menggunakan pola analisis masalah-solusi secara sistematis.",
+    "template": "Analisis 5 alternatif utama untuk [Ide Produk]. Susun tabel berisi: Kelebihan Utama, Keluhan Terbanyak Pengguna, Model Harga, dan 1 Celah yang Belum Terisi."
+  },
+  {
+    "id": "res-3",
+    "title": "MCP Server & Tool-Use Starter Kit",
+    "category": "AI Agent & MCP",
+    "level": "Lanjutan",
+    "description": "Panduan konfigurasi Model Context Protocol lokal untuk menghubungkan asisten AI ke file sistem, repositori, dan API.",
+    "summary": "Berisi struktur konfigurasi dasar serta checklist izin akses agar agent tetap aman saat membaca proyek lokal.",
+    "template": "{\n  \"mcpServers\": {\n    \"filesystem\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-filesystem\", \"./workspace\"]\n    }\n  }\n}"
+  },
+  {
+    "id": "res-4",
+    "title": "Anti-Slop Copywriting & Landing Page Audit",
+    "category": "Desain & Konten",
+    "level": "Pemula",
+    "description": "Daftar periksa untuk membersihkan frasa klise AI dan menggantinya dengan proposisi nilai yang konkret serta terukur.",
+    "summary": "Gunakan prompt audit ini setelah menyusun draf halaman web, penawaran klien, atau skrip konten.",
+    "template": "Tinjau teks berikut. Hapus kata klise (seperti 'revolusioner', 'seamless', 'unlock'). Ganti setiap klaim abstrak dengan fakta operasional atau manfaat langsung bagi pembaca."
+  },
+  {
+    "id": "res-5",
+    "title": "Peta Belajar AI 30 Hari Tanpa Background Coding",
+    "category": "Mulai dari Nol",
+    "level": "Pemula",
+    "description": "Kurikulum harian terarah dari memahami cara kerja token dan konteks hingga merakit otomasi sederhana pertama.",
+    "summary": "Dirancang khusus bagi kreator non-teknis agar tidak tersesat di tengah ratusan rilis tool AI setiap minggu.",
+    "template": "Minggu 1: Dasar Prompt & Struktur Konteks\nMinggu 2: Riset & Sintesis Dokumen Panjang\nMinggu 3: Otomasi Alur Kerja Konten\nMinggu 4: Merakit Mini-App Pertama dengan AI"
+  },
+  {
+    "id": "res-6",
+    "title": "PRD & Technical Spec Generator",
+    "category": "AI Agent & MCP",
+    "level": "Menengah",
+    "description": "Templat dokumen spesifikasi MVP agar AI coding assistant membangun fitur tepat sasaran tanpa melebar ke luar ruang lingkup.",
+    "summary": "Memaksa definisi fitur Wajib (v1), Ditunda (v2), dan Di luar cakupan sebelum proses pembuatan kode dimulai.",
+    "template": "# MVP Spec: [Nama Proyek]\n## 1. Masalah Utama\n## 2. Fitur Wajib v1 (Maksimal 3)\n## 3. Di Luar Cakupan v1\n## 4. Kriteria Selesai (Acceptance Criteria)"
+  }
+]

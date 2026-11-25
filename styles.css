@@ -195,6 +195,17 @@
     align-items: center;
   }
 
+  .app-error:not([hidden]) {
+    max-inline-size: 640px;
+    margin: 2rem auto;
+    padding: 1rem 1.25rem;
+    border: 1px solid oklch(70% 0.16 25 / 0.45);
+    border-radius: var(--radius-md);
+    background: oklch(35% 0.08 25 / 0.2);
+    color: var(--text-primary);
+    text-align: center;
+  }
+
   .subpage-view {
     padding-block: 2.25rem 4rem;
     padding-inline: 1.25rem;

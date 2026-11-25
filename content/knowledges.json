@@ -1,0 +1,182 @@
+[
+  {
+    "id": "vid-1",
+    "title": "Cara Berpikir Sistem: Mengubah Prompt Harian Menjadi Asset",
+    "series": "Fondasi AI Creator",
+    "level": "Mulai dari Nol",
+    "duration": "14:28",
+    "youtubeId": "r8aeYLPp6Mw",
+    "palette": [
+      "#3b4cca",
+      "#1e264d"
+    ],
+    "summary": "Memahami perbedaan antara sekadar bertanya ke AI dan merancang alur kerja berulang yang menghemat jam kerja setiap pekan.",
+    "chapters": [
+      {
+        "time": "00:00",
+        "seconds": 0,
+        "label": "Kenapa hasil AI sering terasa generik"
+      },
+      {
+        "time": "04:15",
+        "seconds": 255,
+        "label": "Anatomi konteks, batasan, dan contoh"
+      },
+      {
+        "time": "09:40",
+        "seconds": 580,
+        "label": "Studi kasus merakit templat produksi"
+      }
+    ]
+  },
+  {
+    "id": "vid-2",
+    "title": "Membangun Landing Page Bersih dengan AI Tanpa Terlihat Template",
+    "series": "UI & Product Craft",
+    "level": "Desain & Konten",
+    "duration": "22:10",
+    "youtubeId": "ysz5S6PUM-U",
+    "palette": [
+      "#2563eb",
+      "#17203d"
+    ],
+    "summary": "Teknik mengarahkan tipografi, kontras warna, ritme tata letak, dan mikro-interaksi agar hasil web terasa dirancang manusia.",
+    "chapters": [
+      {
+        "time": "00:00",
+        "seconds": 0,
+        "label": "Membongkar pola visual khas AI default"
+      },
+      {
+        "time": "07:30",
+        "seconds": 450,
+        "label": "Memilih pasangan font serif dan sans"
+      },
+      {
+        "time": "15:12",
+        "seconds": 912,
+        "label": "Menerapkan filter kualitas sebelum rilis"
+      }
+    ]
+  },
+  {
+    "id": "vid-3",
+    "title": "Pengenalan AI Agent & MCP untuk Otomasi Tugas Lokal",
+    "series": "Agentic Workflow",
+    "level": "AI Agent & MCP",
+    "duration": "19:45",
+    "youtubeId": "jNQXAC9IVRw",
+    "palette": [
+      "#4f46e5",
+      "#191e3a"
+    ],
+    "summary": "Bagaimana AI membaca dokumen proyek, menjalankan perintah terukur, dan menjaga memori antar sesi dengan aman.",
+    "chapters": [
+      {
+        "time": "00:00",
+        "seconds": 0,
+        "label": "Apa itu Model Context Protocol (MCP)"
+      },
+      {
+        "time": "06:50",
+        "seconds": 410,
+        "label": "Menghubungkan tool lokal pertama"
+      },
+      {
+        "time": "14:05",
+        "seconds": 845,
+        "label": "Praktik keamanan dan batas izin akses"
+      }
+    ]
+  },
+  {
+    "id": "vid-4",
+    "title": "Merancang Pipeline Riset Konten & Distribusi Multi-Kanal",
+    "series": "Creator Operations",
+    "level": "Workflow Otomasi",
+    "duration": "16:52",
+    "youtubeId": "r8aeYLPp6Mw",
+    "palette": [
+      "#0284c7",
+      "#15223b"
+    ],
+    "summary": "Mengubah satu sesi riset mendalam menjadi artikel panjang, ringkasan visual, dan skrip video tanpa kehilangan suara asli penulis.",
+    "chapters": [
+      {
+        "time": "00:00",
+        "seconds": 0,
+        "label": "Mengumpulkan sumber terverifikasi"
+      },
+      {
+        "time": "05:45",
+        "seconds": 345,
+        "label": "Ekstraksi sudut pandang unik"
+      },
+      {
+        "time": "11:30",
+        "seconds": 690,
+        "label": "Adaptasi format lintas platform"
+      }
+    ]
+  },
+  {
+    "id": "vid-5",
+    "title": "Vibe Coding Terstruktur: Dari Ide Kasar ke MVP Siap Uji",
+    "series": "Builder Track",
+    "level": "Mulai dari Nol",
+    "duration": "26:04",
+    "youtubeId": "ysz5S6PUM-U",
+    "palette": [
+      "#6366f1",
+      "#181d38"
+    ],
+    "summary": "Alur kerja 5 tahap membangun aplikasi web modular menggunakan AI IDE tanpa terjebak bug berulang.",
+    "chapters": [
+      {
+        "time": "00:00",
+        "seconds": 0,
+        "label": "Menulis PRD ringkas satu halaman"
+      },
+      {
+        "time": "08:20",
+        "seconds": 500,
+        "label": "Menyusun AGENTS.md dan MEMORY.md"
+      },
+      {
+        "time": "18:40",
+        "seconds": 1120,
+        "label": "Membangun dan menguji fitur satu per satu"
+      }
+    ]
+  },
+  {
+    "id": "vid-6",
+    "title": "Teknik Evaluasi Output LLM: Mengurangi Halusinasi pada Data",
+    "series": "Prompt Engineering",
+    "level": "Prompt Engineering",
+    "duration": "13:15",
+    "youtubeId": "jNQXAC9IVRw",
+    "palette": [
+      "#38bdf8",
+      "#172542"
+    ],
+    "summary": "Pola verifikasi langkah demi langkah agar AI selalu mengutip sumber dan mengakui ketidakpastian data.",
+    "chapters": [
+      {
+        "time": "00:00",
+        "seconds": 0,
+        "label": "Sumber utama halusinasi instruksi"
+      },
+      {
+        "time": "04:50",
+        "seconds": 290,
+        "label": "Pola Chain-of-Verification"
+      },
+      {
+        "time": "10:10",
+        "seconds": 610,
+        "label": "Checklist audit sebelum publikasi"
+      }
+    ]
+  }
+]

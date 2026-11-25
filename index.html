@@ -49,6 +49,8 @@
   </header>
 
   <main id="appMain">
+    <p class="app-error" id="appError" role="alert" hidden></p>
+
     <!-- ==================== HERO PORTAL VIEW ==================== -->
     <section class="portal-hero" id="heroView" aria-labelledby="portalTitle">
       <div class="portal-container">
@@ -201,8 +203,7 @@
   <!-- Toast Notification -->
   <output class="toast" id="toast" aria-live="polite"></output>
 
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+  <script type="module" src="app.js"></script>
   <script type="module" src="animation-effects.js"></script>
 </body>
 </html>
