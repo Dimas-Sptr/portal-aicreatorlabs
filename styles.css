@@ -31,6 +31,20 @@
 
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   }
+
+  html.lenis,
+  html.lenis body {
+    block-size: auto;
+  }
+
+  html.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+}
+
+.has-gsap .nav-indicator,
+.has-gsap .hero-tab-line {
+  transition: none;
 }
 
 @layer reset {
@@ -46,7 +60,7 @@
 @layer base {
   html {
     font-size: 16px;
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     background-color: var(--bg-deep);
     color: var(--text-primary);
   }
@@ -74,7 +88,7 @@
     inset: 0;
     z-index: -1;
     overflow: clip;
-    background: radial-gradient(circle at 50% 18%, oklch(20% 0.045 268) 0%, oklch(14% 0.025 268) 58%, oklch(11% 0.02 268) 100%);
+    background: radial-gradient(circle at 50% 18%, oklch(21% 0.045 268) 0%, oklch(15% 0.025 268) 58%, oklch(12% 0.02 268) 100%);
     pointer-events: none;
   }
 
@@ -82,7 +96,7 @@
     position: absolute;
     border-radius: 50%;
     filter: blur(110px);
-    opacity: 0.52;
+    opacity: 0.56;
     will-change: transform;
   }
 
@@ -184,7 +198,6 @@
   .subpage-view {
     padding-block: 2.25rem 4rem;
     padding-inline: 1.25rem;
-    animation: fadeUp 0.35s var(--ease-out);
 
     &[hidden] {
       display: none;
@@ -314,7 +327,8 @@
   .portal-title {
     font-family: var(--font-serif);
     font-weight: 400;
-    font-size: clamp(3.35rem, 8vw, 5.65rem);
+    font-size: clamp(2.75rem, 8vw, 5.65rem);
+    max-inline-size: 100%;
     line-height: 1.06;
     letter-spacing: -0.015em;
     color: var(--text-primary);
@@ -409,14 +423,13 @@
     padding-inline: 1.05rem;
     border-radius: var(--radius-pill);
     cursor: pointer;
-    transition: all 0.2s var(--ease-out);
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
     min-block-size: 40px;
 
     &:hover {
       color: var(--text-primary);
       border-color: var(--border-strong);
       background: oklch(76% 0.13 274 / 0.09);
-      transform: translateY(-1px);
     }
 
     &.is-selected {
@@ -645,7 +658,8 @@
   .subpage-title {
     font-family: var(--font-serif);
     font-weight: 400;
-    font-size: clamp(2.15rem, 4.5vw, 3.15rem);
+    font-size: clamp(1.95rem, 4.5vw, 3.15rem);
+    max-inline-size: 100%;
     line-height: 1.12;
     text-wrap: balance;
     margin-block-end: 0.45rem;
@@ -713,10 +727,9 @@
     text-align: start;
     cursor: pointer;
     backdrop-filter: blur(12px);
-    transition: transform 0.22s var(--ease-out), border-color 0.22s ease, background 0.22s ease;
+    transition: border-color 0.22s ease, background 0.22s ease;
 
     &:hover {
-      transform: translateY(-3px);
       border-color: var(--border-accent);
       background: var(--bg-glass-hover);
     }
@@ -1499,8 +1512,8 @@
 @media (max-width: 640px) {
   .topbar-inner {
     padding-block: 0.7rem;
-    padding-inline: 0.9rem;
-    gap: 0.5rem;
+    padding-inline: 0.65rem;
+    gap: 0.25rem;
   }
 
   .brand-name {
@@ -1508,29 +1521,50 @@
   }
 
   .subnav {
-    gap: 0.85rem;
+    gap: 0.55rem;
   }
 
   .nav-tab {
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
+    font-size: 0.66rem;
+    letter-spacing: 0.07em;
+  }
+
+  .btn-home-pill {
+    gap: 0.3rem;
+    padding-inline: 0.65rem;
+    font-size: 0.78rem;
   }
 
   .hero-nav {
-    gap: 1.2rem;
+    gap: 0.7rem;
     inline-size: 100%;
   }
 
   .hero-tab {
-    font-size: 0.74rem;
-    letter-spacing: 0.12em;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+
+  .chat-meta {
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
   }
 
   .kbd-hint {
     display: none;
   }
 
+  .video-mode-actions {
+    flex-wrap: wrap;
+  }
+
   .modal-panel {
     padding: 1.25rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .brand-return {
+    display: none;
   }
 }

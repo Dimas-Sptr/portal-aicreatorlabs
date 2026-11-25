@@ -1,6 +1,15 @@
 (function () {
   const controller = new AbortController();
   const { signal } = controller;
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let gsap = null;
+  let Lenis = null;
+  let motionAnimate = null;
+  let motionHover = null;
+  let motionPress = null;
+  let lenis = null;
+  let viewTransitionId = 0;
+  let pendingView = null;
 
   const isSandboxed = (() => {
     try {
@@ -86,17 +95,114 @@
     if (!lineEl) return;
     if (!targetTabName || targetTabName === "home") {
       lineEl.classList.remove("is-visible");
-      lineEl.style.inlineSize = "0px";
+      if (gsap && !prefersReducedMotion) {
+        gsap.to(lineEl, { width: 0, autoAlpha: 0, duration: 0.18, ease: "power2.out", overwrite: true });
+      } else {
+        lineEl.style.inlineSize = "0px";
+      }
       return;
     }
     const activeBtn = tabs.find((btn) => btn.dataset.tab === targetTabName);
     if (!activeBtn) return;
-    lineEl.style.inlineSize = activeBtn.offsetWidth + "px";
-    lineEl.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
     lineEl.classList.add("is-visible");
+    if (gsap && !prefersReducedMotion) {
+      gsap.to(lineEl, {
+        x: activeBtn.offsetLeft,
+        width: activeBtn.offsetWidth,
+        autoAlpha: 1,
+        duration: 0.3,
+        ease: "power3.out",
+        overwrite: true
+      });
+    } else {
+      lineEl.style.inlineSize = activeBtn.offsetWidth + "px";
+      lineEl.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
+    }
+  }
+
+  function getVisibleView() {
+    return [heroView, ...Object.values(subViews)].find((view) => !view.hidden);
+  }
+
+  function animateStaggerItems(container, selector) {
+    if (!gsap || prefersReducedMotion || !container) return;
+    const items = container.querySelectorAll(selector);
+    if (!items.length) return;
+    gsap.fromTo(
+      items,
+      { autoAlpha: 0, y: 14 },
+      { autoAlpha: 1, y: 0, duration: 0.38, stagger: 0.055, ease: "power3.out", clearProps: "opacity,visibility,transform" }
+    );
+  }
+
+  function animateViewItems(view) {
+    if (view === subViews.resources) animateStaggerItems(view, ".resource-card");
+    if (view === subViews.knowledges) animateStaggerItems(view, ".video-card");
+    if (view === subViews.articles) animateStaggerItems(view, ".article-row");
+  }
+
+  function transitionView(outgoingView, incomingView) {
+    const transitionId = ++viewTransitionId;
+    if (pendingView) {
+      gsap?.killTweensOf(pendingView);
+      pendingView.hidden = true;
+      if (gsap) gsap.set(pendingView, { clearProps: "opacity,visibility,transform" });
+      pendingView = null;
+    }
+
+    const showIncomingView = () => {
+      if (transitionId !== viewTransitionId) return;
+      if (outgoingView) {
+        outgoingView.hidden = true;
+        if (gsap) gsap.set(outgoingView, { clearProps: "opacity,visibility,transform" });
+      }
+      incomingView.hidden = false;
+      if (gsap && !prefersReducedMotion) {
+        pendingView = incomingView;
+        gsap.fromTo(
+          incomingView,
+          { autoAlpha: 0, y: 14 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.36,
+            ease: "power3.out",
+            onComplete: () => {
+              if (transitionId !== viewTransitionId) return;
+              gsap.set(incomingView, { clearProps: "opacity,visibility,transform" });
+              pendingView = null;
+            }
+          }
+        );
+      }
+      requestAnimationFrame(() => animateViewItems(incomingView));
+    };
+
+    if (outgoingView === incomingView) {
+      incomingView.hidden = false;
+      requestAnimationFrame(() => animateViewItems(incomingView));
+      return;
+    }
+
+    if (gsap && outgoingView && !outgoingView.hidden && !prefersReducedMotion) {
+      gsap.killTweensOf(outgoingView);
+      gsap.to(outgoingView, {
+        autoAlpha: 0,
+        y: -10,
+        duration: 0.14,
+        ease: "power1.in",
+        overwrite: true,
+        onComplete: showIncomingView
+      });
+    } else {
+      showIncomingView();
+    }
   }
 
   function setActiveView(viewName, options = {}) {
+    const outgoingView = getVisibleView();
+    const incomingView = viewName === "home" ? heroView : subViews[viewName];
+    if (!incomingView) return;
     state.activeTab = viewName;
     const isHome = viewName === "home";
 
@@ -116,24 +222,27 @@
 
     if (isHome) {
       topbar.classList.remove("is-visible");
-      heroView.hidden = false;
-      Object.values(subViews).forEach((sec) => (sec.hidden = true));
       moveUnderline(heroTabs, heroTabLine, null);
       if (!options.skipHistory) syncUrlHash("#home");
     } else {
       topbar.classList.add("is-visible");
-      heroView.hidden = true;
       instantResults.hidden = true;
-      Object.entries(subViews).forEach(([key, sec]) => {
-        sec.hidden = key !== viewName;
-      });
       requestAnimationFrame(() => {
         moveUnderline(topTabs, topNavIndicator, viewName);
       });
       if (!options.skipHistory) syncUrlHash(`#${viewName}`);
       if (!options.skipScroll) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        scrollToTop();
       }
+    }
+    transitionView(outgoingView, incomingView);
+  }
+
+  function scrollToTop() {
+    if (lenis) {
+      lenis.scrollTo(0);
+    } else {
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
     }
   }
 
@@ -164,7 +273,7 @@
     "click",
     () => {
       setActiveView("home");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      scrollToTop();
     },
     { signal }
   );
@@ -173,7 +282,7 @@
     "click",
     () => {
       setActiveView("home");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      scrollToTop();
     },
     { signal }
   );
@@ -369,6 +478,8 @@
         if (found) openResourceModal(found);
       });
     });
+    if (!grid.closest(".subpage-view").hidden) animateStaggerItems(grid, ".resource-card");
+    bindMotionInteractions(grid.querySelectorAll(".resource-card"));
   }
 
   function buildCustomThumbSVG(palette, index, extraClass = "") {
@@ -445,6 +556,7 @@
         if (found) openVideoModal(found);
       });
     });
+    if (!grid.closest(".subpage-view").hidden) animateStaggerItems(grid, ".video-card");
   }
 
   function renderArticles() {
@@ -513,6 +625,7 @@
         if (found) openArticleModal(found);
       });
     });
+    if (!list.closest(".subpage-view").hidden) animateStaggerItems(list, ".article-row");
   }
 
   function openResourceModal(item, skipHistory = false) {
@@ -618,7 +731,7 @@
         toggleModeBtn.textContent = "Kembali ke Pemutar Bab";
         playerShell.innerHTML = `
           <iframe
-            src="https://www.youtube.com/embed/${encodeURIComponent(vid.youtubeId)}?start=${Math.floor(currentSec)}&rel=0"
+            src="https://www.youtube.com/embed/${encodeURIComponent(vid.youtubeId)}?start=${Math.floor(currentSec)}&rel=0&playsinline=1"
             title="${escapeHtml(vid.title)}"
             referrerpolicy="strict-origin-when-cross-origin"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -827,19 +940,24 @@
     const canvas = document.getElementById("particleCanvas");
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReduced = prefersReducedMotion;
 
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
-    const pointer = { x: width * 0.5, y: height * 0.35 };
+    const pointer = {
+      x: width * 0.5,
+      y: height * 0.35,
+      targetX: width * 0.5,
+      targetY: height * 0.35
+    };
 
-    const count = Math.min(48, Math.floor((width * height) / 28000));
+    const count = Math.min(110, Math.floor((width * height) / 15000));
     const particles = Array.from({ length: count }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
       r: Math.random() * 1.6 + 0.5,
-      vx: (Math.random() - 0.5) * 0.22,
-      vy: (Math.random() - 0.5) * 0.22 - 0.06,
+      vx: (Math.random() - 0.5) * 0.32,
+      vy: (Math.random() - 0.5) * 0.32 - 0.07,
       alpha: Math.random() * 0.45 + 0.15,
       pulse: Math.random() * Math.PI * 2
     }));
@@ -859,8 +977,8 @@
     window.addEventListener(
       "pointermove",
       (e) => {
-        pointer.x = e.clientX;
-        pointer.y = e.clientY;
+        pointer.targetX = e.clientX;
+        pointer.targetY = e.clientY;
       },
       { passive: true, signal }
     );
@@ -868,18 +986,25 @@
     function draw() {
       ctx.clearRect(0, 0, width, height);
 
+      if (!prefersReduced) {
+        pointer.x += (pointer.targetX - pointer.x) * 0.12;
+        pointer.y += (pointer.targetY - pointer.y) * 0.12;
+      }
+
+      const pointerRadius = 180;
       for (const p of particles) {
         if (!prefersReduced) {
           p.x += p.vx;
           p.y += p.vy;
-          p.pulse += 0.015;
+          p.pulse += 0.025;
 
           const dx = p.x - pointer.x;
           const dy = p.y - pointer.y;
           const dist = Math.hypot(dx, dy);
-          if (dist < 140 && dist > 0) {
-            p.x += (dx / dist) * 0.25;
-            p.y += (dy / dist) * 0.25;
+          if (dist < pointerRadius && dist > 0) {
+            const push = ((pointerRadius - dist) / pointerRadius) * 0.35;
+            p.x += (dx / dist) * push;
+            p.y += (dy / dist) * push;
           }
 
           if (p.x < -10) p.x = width + 10;
@@ -891,10 +1016,13 @@
         const currentAlpha = p.alpha * (0.75 + 0.25 * Math.sin(p.pulse));
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(182, 198, 255, ${currentAlpha.toFixed(3)})`;
+        ctx.fillStyle = `rgba(204, 216, 255, ${currentAlpha.toFixed(3)})`;
+        ctx.shadowColor = `rgba(158, 177, 255, ${Math.min(0.7, currentAlpha + 0.15).toFixed(3)})`;
+        ctx.shadowBlur = p.r > 1.5 ? 12 : 5;
         ctx.fill();
       }
 
+      ctx.shadowBlur = 0;
       if (!prefersReduced) {
         requestAnimationFrame(draw);
       }
@@ -903,9 +1031,45 @@
     draw();
   }
 
+  function bindMotionInteractions(elements) {
+    if (!motionAnimate || !motionHover || !motionPress || prefersReducedMotion) return;
+    Array.from(elements).filter(Boolean).forEach((element) => {
+      motionHover(element, () => {
+        motionAnimate(element, { scale: 1.025, y: -2 }, { duration: 0.18, ease: "easeOut" });
+        return () => motionAnimate(element, { scale: 1, y: 0 }, { duration: 0.2, ease: "easeOut" });
+      });
+      motionPress(element, () => {
+        motionAnimate(element, { scale: 0.97 }, { duration: 0.1, ease: "easeOut" });
+        return () => motionAnimate(element, { scale: 1 }, { duration: 0.16, ease: "easeOut" });
+      });
+    });
+  }
+
   renderResources();
   renderVideos();
   renderArticles();
+  bindMotionInteractions(shortcutBtns);
+  bindMotionInteractions([document.querySelector(".chat-input-wrap")]);
   initParticles();
-  handleHashRoute();
+  syncUrlHash("#home", true);
+
+  document.addEventListener("portal-animations-ready", ({ detail }) => {
+    gsap = detail.gsap;
+    Lenis = detail.Lenis;
+    motionAnimate = detail.animate;
+    motionHover = detail.hover;
+    motionPress = detail.press;
+
+    if (prefersReducedMotion) return;
+
+    document.documentElement.classList.add("has-gsap");
+    lenis = new Lenis({ autoRaf: false, smoothWheel: true, syncTouch: false });
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+    moveUnderline(topTabs, topNavIndicator, state.activeTab);
+    bindMotionInteractions(shortcutBtns);
+    bindMotionInteractions([document.querySelector(".chat-input-wrap")]);
+    bindMotionInteractions(document.querySelectorAll(".resource-card"));
+    animateViewItems(getVisibleView());
+  });
 })();
